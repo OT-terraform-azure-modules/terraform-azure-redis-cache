@@ -167,7 +167,7 @@ variable "rdb_storage_connection_string" {
   default     = null
 }
 
-variable "tag_map" {
+variable "tag_maps" {
   description = "(Optional) Tags for Resource Group"
   type        = map(string)
 }
@@ -177,6 +177,7 @@ variable "tag_map" {
 variable "vnet_name" {
   description = "(Required) The name of the virtual network. Changing this forces a new resource to be created."
   type        = string
+  default = ""
 }
 
 
@@ -184,6 +185,7 @@ variable "vnet_name" {
 variable "subnet_name" {
   description = "The variable for subnet name"
   type        = list(string)
+  default = [ "" ]
 }
 
 /*------------Private endpoint-------------*/
@@ -211,7 +213,7 @@ variable "storage_account_name" {
   description = "(Required) The name must be unique across all existing storage account names in Azure. It must be 3 to 24 characters long, and can contain only lowercase letters and numbers."
   default     = ""
   validation {
-    condition     = length(var.storage_account_name) > 3 && length(var.storage_account_name) < 24
+    condition     = length(var.storage_account_name) > 3 && length(var.storage_account_name) < 24 || length(var.storage_account_name) == 0
     error_message = "Storage account name must be between 3 to 24 letters."
   }
 
@@ -233,7 +235,7 @@ variable "account_tier" {
 variable "account_type" {
   type        = string
   description = "(Optional) Choose an account type that matches your storage needs and optimizes your costs. Valid options are Storage,BlobStorage,BlockBlobStorage,FileStorage,StorageV2"
-  default     = ""
+  default     = "StorageV2"
   validation {
     condition     = contains(["Storage", "BlobStorage", "BlockBlobStorage", "FileStorage", "StorageV2"], var.account_type)
     error_message = "Account type must Storage,BlobStorage,BlockBlobStorage,FileStorage or StorageV2."

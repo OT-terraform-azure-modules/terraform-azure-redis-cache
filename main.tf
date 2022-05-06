@@ -14,13 +14,13 @@ resource "azurerm_redis_cache" "redis_cache" {
   zones                         = var.zones
   replicas_per_primary          = var.replicas_per_primary
   redis_version                 = var.redis_version
-  tags                          = var.tag_map
+  tags                          = var.tag_maps
 
   dynamic "redis_configuration" {
     for_each = var.patch_schedule != null ? [var.patch_schedule] : []
     content {
       aof_backup_enabled              = var.aof_backup_enabled
-      aof_storage_connection_string_0 = var.aof_backup_enabled == true ? var.aof_storage_connection_string_0 : null
+      aof_storage_connection_string_0 = var.aof_backup_enabled == true ? module.storage_account.primary_blob_endpoint : null
       enable_authentication           = var.enable_authentication
       maxfragmentationmemory_reserved = var.sku_name == "Premium" || var.sku_name == "Standard" ? var.maxfragmentationmemory_reserved : null
       maxmemory_delta                 = var.sku_name == "Premium" || var.sku_name == "Standard" ? var.maxmemory_delta : null
@@ -30,7 +30,7 @@ resource "azurerm_redis_cache" "redis_cache" {
       rdb_backup_enabled              = var.sku_name == "Premium" && var.rdb_backup_enabled == true ? true : false
       rdb_backup_frequency            = var.sku_name == "Premium" && var.rdb_backup_enabled == true ? var.rdb_backup_frequency : null
       rdb_backup_max_snapshot_count   = var.sku_name == "Premium" && var.rdb_backup_enabled == true ? var.rdb_backup_max_snapshot_count : null
-      rdb_storage_connection_string   = var.sku_name == "Premium" && var.rdb_backup_enabled == true ? var.rdb_storage_connection_string : null
+      rdb_storage_connection_string   = var.sku_name == "Premium" && var.rdb_backup_enabled == true ? module.storage_account.secondary_blob_endpoint : null
     }
   }
   dynamic "patch_schedule" {
@@ -108,12 +108,12 @@ resource "azurerm_private_dns_a_record" "arecord1" {
 
 module "storage_account" {
   count                    = var.aof_backup_enabled == true || var.rdb_backup_enabled == true ? 1 : 0
-  source                   = "./modules/storage-account/"
+  source                   = "git::https://github.com/OT-terraform-azure-modules/terraform-azure-storage-account.git?ref=V-1.0.0"
   storage_account_name     = var.storage_account_name
   resource_group_name      = var.resource_group_name
   location                 = var.resource_group_location
   account_tier             = var.account_tier
   account_type             = var.account_type
   account_replication_type = var.account_replication_type
-  tag_map                  = var.tag_map
+  tags                     = var.tag_maps
 }

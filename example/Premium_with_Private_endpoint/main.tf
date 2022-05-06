@@ -1,21 +1,33 @@
+# This creates a Azure cache for redis in Premium sku in 2 zones with public access disabled and rdb Data Persistence enabled
+
 provider "azurerm" {
   features {}
 }
 
 module "redis_cache" {
-  source = "../"
+  source = "../../"
+
+  #resource group variables
+  resource_group_name     = "akash_rg"
+  resource_group_location = "eastus"
+
+  # #vnet variables
+  vnet_name = "test_vnet"
+
+  # #subnet variables
+  subnet_name = ["subnet1"]
 
   #Redis cache variables
   redis_name                    = "redis-example130"
-  subnet_id                     = null  # if used, private endpoint cannot be configured
-  public_network_access_enabled = true # if true private endpoint will not be used
+  subnet_id                     = null # if used, private endpoint cannot be configured
+  public_network_access_enabled = false # if true private endpoint will not be used
   capacity                      = 1
   sku_name                      = "Premium"
   enable_non_ssl_port           = false
   minimum_tls_version           = null
   private_static_ip_address     = null
   replicas_per_master           = null
-  shard_count                   = 0
+  shard_count                   = 0 
   zones                         = [1, 2]
 
   #choose Data Persistence type any one of below
@@ -39,21 +51,8 @@ module "redis_cache" {
   account_replication_type = "LRS"
 
 
-  tag_map = {
+  tag_maps = {
     name = "test"
   }
-
-
-
-  /*----------below variables are only placeholders---------------*/
-  #resource group variables
-  resource_group_name     = "akash_rg"
-  resource_group_location = "eastus"
-
-  # #vnet variables
-  vnet_name     = "test_vnet"
-
-  # #subnet variables
-  subnet_name       = ["subnet1"]
 
 }
