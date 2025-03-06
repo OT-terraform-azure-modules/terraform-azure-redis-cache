@@ -21,11 +21,11 @@ variable "sku_name" {
   type        = string
   description = "(Required) The SKU of Redis to use. Possible values are Basic, Standard and Premium."
 }
-variable "enable_non_ssl_port" {
-  type        = bool
-  default     = false
-  description = "(Optional) Enable the non-SSL port (6379) - disabled by default."
-}
+#variable "enable_non_ssl_port" {
+#  type        = bool
+#  default     = false
+#  description = "(Optional) Enable the non-SSL port (6379) - disabled by default."
+#}
 variable "minimum_tls_version" {
   type        = string
   default     = null
@@ -82,11 +82,11 @@ variable "aof_storage_connection_string_1" {
   type        = string
   default     = null
 }
-variable "enable_authentication" {
-  description = "(Optional) If set to false, the Redis instance will be accessible without authentication. Defaults to true."
-  type        = bool
-  default     = false
-}
+# variable "enable_authentication" {
+#  description = "(Optional) If set to false, the Redis instance will be accessible without authentication. Defaults to true."
+#  type        = bool
+#  default     = false
+#}
 variable "maxmemory_reserved" {
   description = "(Optional) Second Storage Account connection string for AOF persistence."
   type        = number
