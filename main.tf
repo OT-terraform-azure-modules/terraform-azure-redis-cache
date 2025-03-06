@@ -108,7 +108,7 @@ resource "azurerm_private_dns_a_record" "arecord1" {
 
 module "storage_account" {
   count                    = var.aof_backup_enabled == true || var.rdb_backup_enabled == true ? 1 : 0
-  source                   = "git::https://github.com/OT-terraform-azure-modules/terraform-azure-storage-account.git?ref=V-1.0.0"
+  source                   = "git::https://github.com/OT-terraform-azure-modules/terraform-azure-storage-account.git?ref=V-1.0.2"
   storage_account_name     = var.storage_account_name
   resource_group_name      = var.resource_group_name
   location                 = var.resource_group_location
