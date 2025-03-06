@@ -5,7 +5,7 @@ resource "azurerm_redis_cache" "redis_cache" {
   capacity                      = var.capacity
   family                        = lookup(var.redis_family, var.sku_name)
   sku_name                      = var.sku_name
-#  enable_non_ssl_port           = var.enable_non_ssl_port
+  # enable_non_ssl_port           = var.enable_non_ssl_port
   minimum_tls_version           = var.minimum_tls_version
   private_static_ip_address     = var.private_static_ip_address
   public_network_access_enabled = var.sku_name == "Premium" ? var.public_network_access_enabled : false
@@ -21,7 +21,7 @@ resource "azurerm_redis_cache" "redis_cache" {
     content {
       aof_backup_enabled              = var.aof_backup_enabled
       aof_storage_connection_string_0 = var.aof_backup_enabled == true ? module.storage_account.primary_blob_endpoint : null
-#      enable_authentication           = var.enable_authentication
+      # enable_authentication           = var.enable_authentication
       maxfragmentationmemory_reserved = var.sku_name == "Premium" || var.sku_name == "Standard" ? var.maxfragmentationmemory_reserved : null
       maxmemory_delta                 = var.sku_name == "Premium" || var.sku_name == "Standard" ? var.maxmemory_delta : null
       maxmemory_policy                = var.maxmemory_policy
